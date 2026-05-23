@@ -25,11 +25,11 @@ export default function Footer() {
               </div>
               <div>
                 <h3 className="text-background font-bold text-base">COBQUATTU</h3>
-                <p className="text-background/70 text-xs">Inteligência Imobiliária</p>
+                <p className="text-background/70 text-xs">Inteligência Territorial</p>
               </div>
             </div>
             <p className="text-background/80 text-sm leading-relaxed">
-              Plataforma de inteligência imobiliária, investimentos estratégicos e estruturação de oportunidades no Ceará e no Brasil.
+              Plataforma de inteligência territorial e desenvolvimento econômico regional no Nordeste brasileiro.
             </p>
           </div>
 
@@ -38,19 +38,19 @@ export default function Footer() {
             <h4 className="text-background font-bold text-sm">Navegação</h4>
             <div className="flex flex-col gap-2">
               <a href="#sobre" className="text-background/70 hover:text-accent transition-colors text-sm">
-                Sobre a COBQUATTU
+                Quem Somos
               </a>
-              <a href="#areas" className="text-background/70 hover:text-accent transition-colors text-sm">
-                Áreas de Atuação
+              <a href="#oqueazemos" className="text-background/70 hover:text-accent transition-colors text-sm">
+                O Que Fazemos
               </a>
-              <a href="#estruturacao" className="text-background/70 hover:text-accent transition-colors text-sm">
-                Estruturação Financeira
+              <a href="#comofunciona" className="text-background/70 hover:text-accent transition-colors text-sm">
+                Como Funciona
               </a>
-              <a href="#regional" className="text-background/70 hover:text-accent transition-colors text-sm">
-                Desenvolvimento Regional
+              <a href="#ecossistema" className="text-background/70 hover:text-accent transition-colors text-sm">
+                Ecossistema
               </a>
-              <a href="#blog" className="text-background/70 hover:text-accent transition-colors text-sm">
-                Blog & Inteligência
+              <a href="#territorio" className="text-background/70 hover:text-accent transition-colors text-sm">
+                Território
               </a>
             </div>
           </div>
@@ -83,7 +83,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Copyright */}
           <p className="text-background/60 text-xs">
-            © {currentYear} COBQUATTU Negócios Imobiliários. Todos os direitos reservados.
+            © {currentYear} COBQUATTU. Inteligência Territorial. Todos os direitos reservados.
           </p>
 
           {/* Social Links */}

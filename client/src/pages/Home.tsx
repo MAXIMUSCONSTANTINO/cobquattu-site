@@ -1,10 +1,11 @@
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
-import AreasSection from '@/components/AreasSection';
-import FinancialSection from '@/components/FinancialSection';
-import RegionalSection from '@/components/RegionalSection';
-import BlogSection from '@/components/BlogSection';
+import WhatWeDoSection from '@/components/WhatWeDoSection';
+import HowItWorksSection from '@/components/HowItWorksSection';
+import EcosystemSection from '@/components/EcosystemSection';
+import TerritorySection from '@/components/TerritorySection';
+import VisionSection from '@/components/VisionSection';
 import StrategicForm from '@/components/StrategicForm';
 import Footer from '@/components/Footer';
 
@@ -32,19 +33,22 @@ export default function Home() {
         {/* About Section */}
         <AboutSection />
 
-        {/* Areas Section */}
-        <AreasSection />
+        {/* What We Do Section */}
+        <WhatWeDoSection />
 
-        {/* Financial Structuring Section */}
-        <FinancialSection />
+        {/* How It Works Section */}
+        <HowItWorksSection />
 
-        {/* Regional Development Section */}
-        <RegionalSection />
+        {/* Ecosystem Section */}
+        <EcosystemSection />
 
-        {/* Blog / Market Intelligence Section */}
-        <BlogSection />
+        {/* Territory Section */}
+        <TerritorySection />
 
-        {/* Strategic Form */}
+        {/* Vision Section */}
+        <VisionSection />
+
+        {/* Strategic Form - Institutional Contact */}
         <StrategicForm />
       </main>
 

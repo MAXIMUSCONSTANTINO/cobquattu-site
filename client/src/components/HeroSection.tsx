@@ -30,29 +30,29 @@ export default function HeroSection() {
         <div className="max-w-2xl space-y-4 md:space-y-6">
           {/* Headline */}
           <h1 className="headline text-3xl sm:text-4xl md:text-6xl lg:text-7xl text-background leading-tight">
-            Conectando Patrimônio, Estratégia e Desenvolvimento.
+            Inteligência Territorial para Desenvolvimento Regional.
           </h1>
 
           {/* Subheadline */}
           <p className="text-base sm:text-lg md:text-xl text-background/90 leading-relaxed max-w-xl">
-            A COBQUATTU atua na inteligência imobiliária, investimentos estratégicos e estruturação de oportunidades no Ceará e no Brasil.
+            Conectando imóveis, projetos e oportunidades de forma estruturada e estratégica no Nordeste brasileiro.
           </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
             <a
-              href="https://wa.me/5585997688325?text=Olá%20COBQUATTU%20Negócios%20Imobiliários%2C%20gostaria%20de%20falar%20com%20um%20especialista."
+              href="https://wa.me/5585997688325?text=Olá%20COBQUATTU%2C%20gostaria%20de%20conectar%20com%20um%20especialista%20em%20inteligência%20territorial."
               target="_blank"
               rel="noopener noreferrer"
             >
               <Button className="bg-accent text-foreground hover:bg-accent/90 group">
-                Falar com um Especialista
+                Conectar com Especialista
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </a>
             <a href="#sobre">
               <Button variant="outline" className="border-background text-background hover:bg-background/10">
-                Conheça a COBQUATTU
+                Conheça Nossa Plataforma
               </Button>
             </a>
           </div>

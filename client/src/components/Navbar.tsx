@@ -15,11 +15,12 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { label: 'Sobre', href: '#sobre' },
-    { label: 'Áreas de Atuação', href: '#areas' },
-    { label: 'Estruturação', href: '#estruturacao' },
-    { label: 'Regional', href: '#regional' },
-    { label: 'Blog', href: '#blog' },
+    { label: 'Quem Somos', href: '#sobre' },
+    { label: 'O Que Fazemos', href: '#oqueazemos' },
+    { label: 'Como Funciona', href: '#comofunciona' },
+    { label: 'Ecossistema', href: '#ecossistema' },
+    { label: 'Território', href: '#territorio' },
+    { label: 'Contato', href: '#contato' },
   ];
 
   const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -41,7 +42,7 @@ export default function Navbar() {
           </div>
           <div className="flex flex-col">
             <span className="text-foreground font-bold text-xs md:text-sm leading-tight">COBQUATTU</span>
-            <span className="text-muted-foreground text-xs hidden md:block">Inteligência Imobiliária</span>
+            <span className="text-muted-foreground text-xs hidden md:block">Inteligência Territorial</span>
           </div>
         </div>
 
@@ -62,14 +63,14 @@ export default function Navbar() {
         {/* CTA Button - Desktop */}
         <div className="hidden md:block">
           <a
-            href="https://wa.me/5585997688325?text=Olá%20COBQUATTU%20Negócios%20Imobiliários%2C%20gostaria%20de%20falar%20com%20um%20especialista."
+            href="https://wa.me/5585997688325?text=Olá%20COBQUATTU%2C%20gostaria%20de%20conectar%20com%20um%20especialista%20em%20inteligência%20territorial."
             target="_blank"
             rel="noopener noreferrer"
           >
             <Button
               className="bg-foreground text-background hover:bg-accent hover:text-foreground transition-all duration-200"
             >
-              Falar com Especialista
+              Conectar
             </Button>
           </a>
         </div>
@@ -104,13 +105,13 @@ export default function Navbar() {
             ))}
             <div className="pt-4 border-t border-border">
               <a
-                href="https://wa.me/5585997688325?text=Olá%20COBQUATTU%20Negócios%20Imobiliários%2C%20gostaria%20de%20falar%20com%20um%20especialista."
+                href="https://wa.me/5585997688325?text=Olá%20COBQUATTU%2C%20gostaria%20de%20conectar%20com%20um%20especialista%20em%20inteligência%20territorial."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block"
               >
                 <Button className="w-full bg-foreground text-background hover:bg-accent">
-                  Falar com Especialista
+                  Conectar
                 </Button>
               </a>
             </div>

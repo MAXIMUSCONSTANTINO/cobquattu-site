@@ -13,12 +13,12 @@ import { toast } from 'sonner';
  */
 
 const interestOptions = [
-  'Investidor',
-  'Proprietário',
-  'Parceiro Estratégico',
-  'Empresário',
-  'Interesse Imobiliário',
-  'Desenvolvimento de Projeto',
+  'Proprietário de Ativos',
+  'Empresario em Expansão',
+  'Parceiro Especializado',
+  'Desenvolvimento Territorial',
+  'Inteligência Territorial',
+  'Conexão Estratégica',
 ];
 
 export default function StrategicForm() {
@@ -93,15 +93,15 @@ export default function StrategicForm() {
   };
 
   return (
-    <section className="py-20 md:py-32 bg-foreground text-background">
+    <section id="contato" className="py-20 md:py-32 bg-foreground text-background">
       <div className="container">
         <div className="max-w-2xl mx-auto">
           {/* Header */}
           <div className="mb-12 space-y-4">
-            <h2 className="text-4xl md:text-5xl font-bold">Fale com um Especialista</h2>
+            <h2 className="text-4xl md:text-5xl font-bold">Contato Institucional</h2>
             <div className="w-16 h-1 bg-accent"></div>
             <p className="text-lg text-background/80">
-              Preencha o formulário abaixo e conecte-se com nosso time para discutir oportunidades estratégicas.
+              Conecte-se com nosso time para explorar oportunidades de desenvolvimento territorial.
             </p>
           </div>
 
