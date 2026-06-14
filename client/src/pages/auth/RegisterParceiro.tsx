@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowRight, Lock, Mail, Phone, User, Briefcase, Star } from 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import axios from 'axios';
+import { api } from '@/lib/api';
 
 /**
  * COBQUATTU - Inscrição de Embaixadores (Parceiros)
@@ -70,7 +70,7 @@ export default function RegisterParceiro() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('/api/auth/register', {
+      const response = await api.post('/auth/register', {
         email: formData.email,
         password: formData.senha,
         firstName: formData.nome,
