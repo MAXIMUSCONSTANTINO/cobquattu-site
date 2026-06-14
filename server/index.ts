@@ -1,5 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -20,6 +21,14 @@ async function startServer() {
   const server = createServer(app);
 
   // Middleware
+  app.use(cors({
+    origin: [
+      "https://cobquattu.com.br",
+      "https://www.cobquattu.com.br"
+    ],
+    credentials: true
+  }));
+
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
@@ -71,3 +80,5 @@ startServer().catch((error) => {
   console.error("❌ Failed to start server:", error);
   process.exit(1);
 });
+
+
