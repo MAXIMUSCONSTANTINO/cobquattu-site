@@ -1,13 +1,30 @@
+```ts
 import { Router, Request, Response } from "express";
-import { hashPassword, verifyPassword, generateToken, isValidEmail, isValidPassword } from "./auth";
-import { createUser, getUserByEmail, getUserByEmailOrPhone, createSession, createProprietario, createEmpresario, createParceiro } from "./db";
+import {
+  hashPassword,
+  verifyPassword,
+  generateToken,
+  isValidEmail,
+  isValidPassword,
+} from "./auth";
+
+import {
+  createUser,
+  getUserByEmail,
+  getUserByEmailOrPhone,
+  createSession,
+  createProprietario,
+  createEmpresario,
+  createParceiro,
+} from "./db";
+
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "../shared/const";
 import type { RegisterRequest, LoginRequest } from "../shared/types";
 
 const router = Router();
 
 /**
- * POST /api/auth/register
+ * POST /auth/register
  * Registra um novo usuário
  */
 router.post("/auth/register", async (req: Request, res: Response) => {
@@ -38,6 +55,7 @@ router.post("/auth/register", async (req: Request, res: Response) => {
 
     // Verifica se usuário já existe
     const existingUser = await getUserByEmail(data.email);
+
     if (existingUser) {
       return res.status(409).json({
         success: false,
@@ -49,7 +67,7 @@ router.post("/auth/register", async (req: Request, res: Response) => {
     const hashedPassword = await hashPassword(data.password);
 
     // Cria usuário
-    const userResult = await createUser({
+    await createUser({
       email: data.email,
       phone: data.phone,
       password: hashedPassword,
@@ -59,10 +77,16 @@ router.post("/auth/register", async (req: Request, res: Response) => {
       userType: data.userType,
     });
 
-    // Obtém o ID do usuário criado
-    const userId = (userResult as any).insertId || data.email; // Fallback para email se não conseguir ID
+    // Busca usuário recém criado para obter UUID real
+    const createdUser = await getUserByEmail(data.email);
 
-    // Cria dados específicos por tipo de usuário
+    if (!createdUser) {
+      throw new Error("User created but not found");
+    }
+
+    const userId = createdUser.id;
+
+    // Cria dados específicos por tipo
     if (data.userType === "proprietario" && data.matricula) {
       await createProprietario({
         userId,
@@ -78,21 +102,26 @@ router.post("/auth/register", async (req: Request, res: Response) => {
         valorNecessario: data.valorNecessario,
       });
     } else if (data.userType === "parceiro") {
-      await createParceiro({ userId });
+      await createParceiro({
+        userId,
+      });
     }
 
-    // Gera token JWT
+    // Gera token
     const token = generateToken(userId);
 
     // Cria sessão
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 dias
+    const expiresAt = new Date(
+      Date.now() + 7 * 24 * 60 * 60 * 1000
+    );
+
     await createSession({
       userId,
       token,
       expiresAt,
     });
 
-    // Define cookie
+    // Cookie
     res.cookie("cobquattu_session", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -106,13 +135,14 @@ router.post("/auth/register", async (req: Request, res: Response) => {
       token,
       user: {
         id: userId,
-        email: data.email,
-        firstName: data.firstName,
-        userType: data.userType,
+        email: createdUser.email,
+        firstName: createdUser.firstName,
+        userType: createdUser.userType,
       },
     });
   } catch (error) {
     console.error("Register error:", error);
+
     return res.status(500).json({
       success: false,
       message: ERROR_MESSAGES.SERVER_ERROR,
@@ -122,7 +152,7 @@ router.post("/auth/register", async (req: Request, res: Response) => {
 
 /**
  * POST /auth/login
- * Faz login de um usuário
+ * Faz login de usuário
  */
 router.post("/auth/login", async (req: Request, res: Response) => {
   try {
@@ -135,8 +165,13 @@ router.post("/auth/login", async (req: Request, res: Response) => {
       });
     }
 
-    // 🔎 Busca usuário por email ou telefone
-    const user = await getUserByEmailOrPhone(emailOrPhone);
+    const identifier = emailOrPhone.trim();
+
+    console.log("LOGIN ATTEMPT:", identifier);
+
+    const user = await getUserByEmailOrPhone(identifier);
+
+    console.log("USER FOUND:", user?.email);
 
     if (!user) {
       return res.status(401).json({
@@ -145,8 +180,10 @@ router.post("/auth/login", async (req: Request, res: Response) => {
       });
     }
 
-    // 🔐 Verifica senha
-    const isPasswordValid = await verifyPassword(password, user.password);
+    const isPasswordValid = await verifyPassword(
+      password,
+      user.password
+    );
 
     if (!isPasswordValid) {
       return res.status(401).json({
@@ -155,11 +192,11 @@ router.post("/auth/login", async (req: Request, res: Response) => {
       });
     }
 
-    // 🔑 Gera token JWT
     const token = generateToken(user.id);
 
-    // 📦 Cria sessão
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    const expiresAt = new Date(
+      Date.now() + 7 * 24 * 60 * 60 * 1000
+    );
 
     await createSession({
       userId: user.id,
@@ -167,7 +204,6 @@ router.post("/auth/login", async (req: Request, res: Response) => {
       expiresAt,
     });
 
-    // 🍪 Cookie de autenticação
     res.cookie("cobquattu_session", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -186,9 +222,9 @@ router.post("/auth/login", async (req: Request, res: Response) => {
         userType: user.userType,
       },
     });
-
   } catch (error) {
     console.error("Login error:", error);
+
     return res.status(500).json({
       success: false,
       message: ERROR_MESSAGES.SERVER_ERROR,
@@ -197,11 +233,11 @@ router.post("/auth/login", async (req: Request, res: Response) => {
 });
 
 /**
- * POST /api/auth/logout
- * Faz logout do usuário
+ * POST /auth/logout
  */
 router.post("/api/auth/logout", (req: Request, res: Response) => {
   res.clearCookie("cobquattu_session");
+
   return res.json({
     success: true,
     message: SUCCESS_MESSAGES.LOGOUT_SUCCESS,
@@ -210,7 +246,6 @@ router.post("/api/auth/logout", (req: Request, res: Response) => {
 
 /**
  * GET /auth/me
- * Obtém informações do usuário autenticado
  */
 router.get("/auth/me", async (req: Request, res: Response) => {
   try {
@@ -223,8 +258,8 @@ router.get("/auth/me", async (req: Request, res: Response) => {
       });
     }
 
-    // Verifica e decodifica o token JWT
     const { verifyToken } = await import("./auth");
+
     const decoded = verifyToken(token);
 
     if (!decoded) {
@@ -234,8 +269,8 @@ router.get("/auth/me", async (req: Request, res: Response) => {
       });
     }
 
-    // Busca o usuário pelo ID do token
     const { getUserById } = await import("./db");
+
     const user = await getUserById(decoded.userId);
 
     if (!user) {
@@ -256,6 +291,7 @@ router.get("/auth/me", async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Auth me error:", error);
+
     return res.status(500).json({
       success: false,
       message: ERROR_MESSAGES.SERVER_ERROR,
@@ -264,3 +300,5 @@ router.get("/auth/me", async (req: Request, res: Response) => {
 });
 
 export default router;
+```
+
