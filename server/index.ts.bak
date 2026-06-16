@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
-import authRoutes from "./routes";
+import authRoutes from "./routes/auth";
 import propertiesRoutes from "./routes/properties";
 import projectsRoutes from "./routes/projects";
 import leadsRoutes from "./routes/leads";

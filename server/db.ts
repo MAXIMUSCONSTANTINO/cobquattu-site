@@ -1,4 +1,6 @@
-import dotenv from "dotenv";dotenv.config();
+import dotenv from "dotenv";
+dotenv.config();
+
 import { drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
 import { eq, or } from "drizzle-orm";
@@ -12,13 +14,13 @@ let db: ReturnType<typeof drizzle> | null = null;
 export async function initializeDatabase() {
   if (db) return db;
 
-  const connection = await mysql.createConnection({
-    host: process.env.DB_HOST || "localhost",
-    port: Number(process.env.DB_PORT || 3306),
-    user: process.env.DB_USER || "root",
-    password: process.env.DB_PASSWORD || "",
-    database: process.env.DB_NAME || "cobquattu_db",
-  });
+  const url = process.env.DATABASE_URL;
+
+  if (!url) {
+    throw new Error("❌ Missing DATABASE_URL");
+  }
+
+  const connection = await mysql.createConnection(url);
 
   db = drizzle(connection, { schema, mode: "default" });
 
@@ -37,9 +39,10 @@ export function getDatabase() {
   return db;
 }
 
-/**
- * CREATE USER
- */
+// ============================================================================
+// USERS
+// ============================================================================
+
 export async function createUser(data: {
   email: string;
   phone?: string;
@@ -53,9 +56,6 @@ export async function createUser(data: {
   return database.insert(schema.users).values(data);
 }
 
-/**
- * GET USER BY EMAIL
- */
 export async function getUserByEmail(email: string) {
   const database = getDatabase();
 
@@ -64,9 +64,6 @@ export async function getUserByEmail(email: string) {
   });
 }
 
-/**
- * GET USER BY PHONE
- */
 export async function getUserByPhone(phone: string) {
   const database = getDatabase();
 
@@ -75,20 +72,15 @@ export async function getUserByPhone(phone: string) {
   });
 }
 
-/**
- * GET USER BY EMAIL OR PHONE
- */
 export async function getUserByEmailOrPhone(identifier: string) {
   const database = getDatabase();
 
   return database.query.users.findFirst({
-    where: (users, { eq, or }) => or(eq(users.email, identifier), eq(users.phone, identifier)),
+    where: (users, { eq, or }) =>
+      or(eq(users.email, identifier), eq(users.phone, identifier)),
   });
 }
 
-/**
- * GET USER BY ID
- */
 export async function getUserById(id: string) {
   const database = getDatabase();
 
@@ -97,9 +89,10 @@ export async function getUserById(id: string) {
   });
 }
 
-/**
- * PROPRIETARIO
- */
+// ============================================================================
+// PROPRIETARIO / EMPRESARIO / PARCEIRO
+// ============================================================================
+
 export async function createProprietario(data: {
   userId: string;
   matricula: string;
@@ -110,9 +103,6 @@ export async function createProprietario(data: {
   return database.insert(schema.proprietarios).values(data);
 }
 
-/**
- * EMPRESARIO
- */
 export async function createEmpresario(data: {
   userId: string;
   nomeProjeto: string;
@@ -123,19 +113,15 @@ export async function createEmpresario(data: {
   return database.insert(schema.empresarios).values(data);
 }
 
-/**
- * PARCEIRO
- */
-export async function createParceiro(data: {
-  userId: string;
-}) {
+export async function createParceiro(data: { userId: string }) {
   const database = getDatabase();
   return database.insert(schema.parceiros).values(data);
 }
 
-/**
- * SESSION
- */
+// ============================================================================
+// SESSIONS
+// ============================================================================
+
 export async function createSession(data: {
   userId: string;
   token: string;
@@ -145,9 +131,6 @@ export async function createSession(data: {
   return database.insert(schema.sessions).values(data);
 }
 
-/**
- * GET SESSION
- */
 export async function getSessionByToken(token: string) {
   const database = getDatabase();
 
@@ -156,30 +139,19 @@ export async function getSessionByToken(token: string) {
   });
 }
 
-/**
- * DELETE SESSION
- */
 export async function deleteSession(id: string) {
   const database = getDatabase();
 
-  return database.delete(schema.sessions).where(eq(schema.sessions.id, id));
+  return database
+    .delete(schema.sessions)
+    .where(eq(schema.sessions.id, id));
 }
 
 // ============================================================================
-// PROPERTIES (IMÓVEIS)
+// PROPERTIES
 // ============================================================================
 
-export async function createProperty(data: {
-  userId: string;
-  title: string;
-  matricula: string;
-  city: string;
-  state: string;
-  area?: number;
-  value?: number;
-  description?: string;
-  status?: "disponivel" | "negociacao" | "comercializado";
-}) {
+export async function createProperty(data: any) {
   const database = getDatabase();
   return database.insert(schema.properties).values(data);
 }
@@ -200,12 +172,17 @@ export async function getPropertyById(id: string) {
 
 export async function updateProperty(id: string, data: any) {
   const database = getDatabase();
-  return database.update(schema.properties).set(data).where(eq(schema.properties.id, id));
+  return database
+    .update(schema.properties)
+    .set(data)
+    .where(eq(schema.properties.id, id));
 }
 
 export async function deleteProperty(id: string) {
   const database = getDatabase();
-  return database.delete(schema.properties).where(eq(schema.properties.id, id));
+  return database
+    .delete(schema.properties)
+    .where(eq(schema.properties.id, id));
 }
 
 export async function getAllProperties() {
@@ -214,19 +191,10 @@ export async function getAllProperties() {
 }
 
 // ============================================================================
-// PROJECTS (PROJETOS)
+// PROJECTS
 // ============================================================================
 
-export async function createProject(data: {
-  userId: string;
-  name: string;
-  segment?: string;
-  requiredValue?: number;
-  capturedValue?: number;
-  deadline?: string;
-  description?: string;
-  status?: "planejamento" | "captacao" | "execucao" | "concluido";
-}) {
+export async function createProject(data: any) {
   const database = getDatabase();
   return database.insert(schema.projects).values(data);
 }
@@ -247,12 +215,17 @@ export async function getProjectById(id: string) {
 
 export async function updateProject(id: string, data: any) {
   const database = getDatabase();
-  return database.update(schema.projects).set(data).where(eq(schema.projects.id, id));
+  return database
+    .update(schema.projects)
+    .set(data)
+    .where(eq(schema.projects.id, id));
 }
 
 export async function deleteProject(id: string) {
   const database = getDatabase();
-  return database.delete(schema.projects).where(eq(schema.projects.id, id));
+  return database
+    .delete(schema.projects)
+    .where(eq(schema.projects.id, id));
 }
 
 export async function getAllProjects() {
@@ -261,19 +234,10 @@ export async function getAllProjects() {
 }
 
 // ============================================================================
-// LEADS (CLIENTES)
+// LEADS
 // ============================================================================
 
-export async function createLead(data: {
-  userId: string;
-  name: string;
-  type: "proprietario" | "empresario";
-  phone?: string;
-  email?: string;
-  city?: string;
-  observations?: string;
-  status?: "novo" | "andamento" | "convertido" | "arquivado";
-}) {
+export async function createLead(data: any) {
   const database = getDatabase();
   return database.insert(schema.leads).values(data);
 }
@@ -294,12 +258,17 @@ export async function getLeadById(id: string) {
 
 export async function updateLead(id: string, data: any) {
   const database = getDatabase();
-  return database.update(schema.leads).set(data).where(eq(schema.leads.id, id));
+  return database
+    .update(schema.leads)
+    .set(data)
+    .where(eq(schema.leads.id, id));
 }
 
 export async function deleteLead(id: string) {
   const database = getDatabase();
-  return database.delete(schema.leads).where(eq(schema.leads.id, id));
+  return database
+    .delete(schema.leads)
+    .where(eq(schema.leads.id, id));
 }
 
 export async function getAllLeads() {
@@ -308,15 +277,10 @@ export async function getAllLeads() {
 }
 
 // ============================================================================
-// NOTIFICATIONS (NOTIFICAÇÕES)
+// NOTIFICATIONS
 // ============================================================================
 
-export async function createNotification(data: {
-  userId: string;
-  title: string;
-  message?: string;
-  type?: string;
-}) {
+export async function createNotification(data: any) {
   const database = getDatabase();
   return database.insert(schema.notifications).values(data);
 }
@@ -324,30 +288,29 @@ export async function createNotification(data: {
 export async function getNotificationsByUserId(userId: string) {
   const database = getDatabase();
   return database.query.notifications.findMany({
-    where: (notifications, { eq }) => eq(notifications.userId, userId),
+    where: (n, { eq }) => eq(n.userId, userId),
   });
 }
 
 export async function markNotificationAsRead(id: string) {
   const database = getDatabase();
-  return database.update(schema.notifications).set({ read: 1 }).where(eq(schema.notifications.id, id));
+  return database
+    .update(schema.notifications)
+    .set({ read: 1 })
+    .where(eq(schema.notifications.id, id));
 }
 
 // ============================================================================
 // PLATFORM LOGS
 // ============================================================================
 
-export async function createPlatformLog(data: {
-  userId?: string;
-  action: string;
-  details?: string;
-}) {
+export async function createPlatformLog(data: any) {
   const database = getDatabase();
   return database.insert(schema.platformLogs).values(data);
 }
 
 // ============================================================================
-// ADMIN FUNCTIONS
+// ADMIN
 // ============================================================================
 
 export async function getAllUsers() {
@@ -362,25 +325,22 @@ export async function getUsersByType(userType: string) {
   });
 }
 
-export async function blockUser(userId: string) {
-  const database = getDatabase();
-  // Implementar bloqueio de usuário (pode ser um campo adicional no schema)
-  // Por enquanto, apenas registramos a ação
-  return createPlatformLog({
-    action: "user_blocked",
-    details: `User ${userId} blocked`,
-  });
-}
-
 export async function deleteUser(userId: string) {
   const database = getDatabase();
-  // Deletar todas as sessões do usuário
-  await database.delete(schema.sessions).where(eq(schema.sessions.userId, userId));
-  // Deletar o usuário
-  return database.delete(schema.users).where(eq(schema.users.id, userId));
+
+  await database
+    .delete(schema.sessions)
+    .where(eq(schema.sessions.userId, userId));
+
+  return database
+    .delete(schema.users)
+    .where(eq(schema.users.id, userId));
 }
 
 export async function updateUser(userId: string, data: any) {
   const database = getDatabase();
-  return database.update(schema.users).set(data).where(eq(schema.users.id, userId));
+  return database
+    .update(schema.users)
+    .set(data)
+    .where(eq(schema.users.id, userId));
 }

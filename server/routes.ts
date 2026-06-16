@@ -1,4 +1,3 @@
-```ts
 import { Router, Request, Response } from "express";
 import {
   hashPassword,
@@ -25,13 +24,11 @@ const router = Router();
 
 /**
  * POST /auth/register
- * Registra um novo usuário
  */
 router.post("/auth/register", async (req: Request, res: Response) => {
   try {
     const data = req.body as RegisterRequest;
 
-    // Validações
     if (!data.email || !data.password || !data.firstName || !data.userType) {
       return res.status(400).json({
         success: false,
@@ -53,7 +50,6 @@ router.post("/auth/register", async (req: Request, res: Response) => {
       });
     }
 
-    // Verifica se usuário já existe
     const existingUser = await getUserByEmail(data.email);
 
     if (existingUser) {
@@ -63,10 +59,8 @@ router.post("/auth/register", async (req: Request, res: Response) => {
       });
     }
 
-    // Hash da senha
     const hashedPassword = await hashPassword(data.password);
 
-    // Cria usuário
     await createUser({
       email: data.email,
       phone: data.phone,
@@ -77,7 +71,6 @@ router.post("/auth/register", async (req: Request, res: Response) => {
       userType: data.userType,
     });
 
-    // Busca usuário recém criado para obter UUID real
     const createdUser = await getUserByEmail(data.email);
 
     if (!createdUser) {
@@ -86,7 +79,6 @@ router.post("/auth/register", async (req: Request, res: Response) => {
 
     const userId = createdUser.id;
 
-    // Cria dados específicos por tipo
     if (data.userType === "proprietario" && data.matricula) {
       await createProprietario({
         userId,
@@ -102,18 +94,12 @@ router.post("/auth/register", async (req: Request, res: Response) => {
         valorNecessario: data.valorNecessario,
       });
     } else if (data.userType === "parceiro") {
-      await createParceiro({
-        userId,
-      });
+      await createParceiro({ userId });
     }
 
-    // Gera token
     const token = generateToken(userId);
 
-    // Cria sessão
-    const expiresAt = new Date(
-      Date.now() + 7 * 24 * 60 * 60 * 1000
-    );
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
     await createSession({
       userId,
@@ -121,7 +107,6 @@ router.post("/auth/register", async (req: Request, res: Response) => {
       expiresAt,
     });
 
-    // Cookie
     res.cookie("cobquattu_session", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -152,7 +137,6 @@ router.post("/auth/register", async (req: Request, res: Response) => {
 
 /**
  * POST /auth/login
- * Faz login de usuário
  */
 router.post("/auth/login", async (req: Request, res: Response) => {
   try {
@@ -172,6 +156,9 @@ router.post("/auth/login", async (req: Request, res: Response) => {
     const user = await getUserByEmailOrPhone(identifier);
 
     console.log("USER FOUND:", user?.email);
+
+    console.log("USER:", user);
+    console.log("PASSWORD EXISTS:", !!user?.password);
 
     if (!user) {
       return res.status(401).json({
@@ -194,15 +181,17 @@ router.post("/auth/login", async (req: Request, res: Response) => {
 
     const token = generateToken(user.id);
 
-    const expiresAt = new Date(
-      Date.now() + 7 * 24 * 60 * 60 * 1000
-    );
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
-    await createSession({
-      userId: user.id,
-      token,
-      expiresAt,
-    });
+    try {
+      await createSession({
+        userId: user.id,
+        token,
+        expiresAt,
+      });
+    } catch (e) {
+      console.error("SESSION ERROR:", e);
+    }
 
     res.cookie("cobquattu_session", token, {
       httpOnly: true,
@@ -235,7 +224,7 @@ router.post("/auth/login", async (req: Request, res: Response) => {
 /**
  * POST /auth/logout
  */
-router.post("/api/auth/logout", (req: Request, res: Response) => {
+router.post("/auth/logout", (req: Request, res: Response) => {
   res.clearCookie("cobquattu_session");
 
   return res.json({
@@ -300,5 +289,4 @@ router.get("/auth/me", async (req: Request, res: Response) => {
 });
 
 export default router;
-```
 
