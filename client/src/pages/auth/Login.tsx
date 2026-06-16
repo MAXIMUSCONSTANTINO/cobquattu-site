@@ -4,7 +4,7 @@ import { ArrowRight, Mail, Phone, Lock, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import axios from 'axios';
+import { api } from '@/lib/api';
 
 /**
  * COBQUATTU - Página de Login
@@ -42,7 +42,7 @@ export default function Login() {
     }
 
     try {
-      const response = await axios.post('/api/auth/login', {
+      const response = await api.post('/api/auth/login', {
         emailOrPhone: formData.emailOrPhone,
         password: formData.password,
       });
