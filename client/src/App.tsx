@@ -18,6 +18,8 @@ import DashboardProprietario from "./pages/DashboardProprietario";
 import DashboardEmpresario from "./pages/DashboardEmpresario";
 import DashboardAdmin from "./pages/DashboardAdmin";
 import Settings from "./pages/Settings";
+import { AuthProvider } from "./contexts/AuthContext";
+import { useAuth } from "./contexts/AuthContext";
 
 
 function Router() {
@@ -51,19 +53,23 @@ function Router() {
 // - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
 
 function App() {
+  const auth = useAuth();
+
+  if (auth.loading) {
+    return <div>Carregando sessão...</div>;
+  }
+
   return (
     <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="dark"
-        // switchable
-      >
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider defaultTheme="dark">
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </ThemeProvider>
+      </AuthProvider>
     </ErrorBoundary>
   );
 }
-
 export default App;
