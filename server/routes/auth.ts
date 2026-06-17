@@ -45,9 +45,17 @@ router.post("/login", async (req, res) => {
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
 
+    // 🔥 ADICIONAR COOKIE (ESSENCIAL)
+    res.cookie("cobquattu_session", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
     return res.json({
       token,
-      user
+      user,
     });
 
   } catch (err) {
