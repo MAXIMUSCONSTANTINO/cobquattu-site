@@ -28,7 +28,9 @@ router.post("/login", async (req, res) => {
     const user = await getUserByEmailOrPhone(emailOrPhone);
 
     if (!user) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.status(410).json({
+  error: "Deprecated route - use /auth/login",
+});
     }
 
     const valid = await verifyPassword(password, user.password);

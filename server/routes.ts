@@ -108,10 +108,11 @@ router.post("/auth/register", async (req: Request, res: Response) => {
     });
 
     res.cookie("cobquattu_session", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     return res.status(201).json({
