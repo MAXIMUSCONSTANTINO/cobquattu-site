@@ -3,7 +3,7 @@ import { LogOut, Briefcase, TrendingUp, DollarSign, Settings, Edit2, Trash2, Plu
 import { Button } from '@/components/ui/button';
 import { useLocation } from 'wouter';
 import { toast } from 'sonner';
-import axios from 'axios';
+import { api } from '@/lib/api';
 import ProjectForm from '@/components/ProjectForm';
 import NotificationCenter from '@/components/NotificationCenter';
 

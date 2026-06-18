@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import axios from 'axios';
+import { api } from '@/lib/api';
 import { X } from 'lucide-react';
 
 interface LeadFormProps {

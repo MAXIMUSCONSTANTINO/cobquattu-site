@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Bell, X, Check } from 'lucide-react';
-import axios from 'axios';
+import { api } from '@/lib/api';
 import { toast } from 'sonner';
 
 interface Notification {

@@ -3,7 +3,7 @@ import { LogOut, Users, Plus, Settings, Edit2, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLocation } from 'wouter';
 import { toast } from 'sonner';
-import axios from 'axios';
+import { api } from '@/lib/api';
 import LeadForm from '@/components/LeadForm';
 import NotificationCenter from '@/components/NotificationCenter';
 

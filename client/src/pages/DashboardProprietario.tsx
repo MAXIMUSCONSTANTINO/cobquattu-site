@@ -3,7 +3,7 @@ import { LogOut, Home, MapPin, DollarSign, Settings, Edit2, Trash2, Plus } from 
 import { Button } from '@/components/ui/button';
 import { useLocation } from 'wouter';
 import { toast } from 'sonner';
-import axios from 'axios';
+import { api } from '@/lib/api';
 import PropertyForm from '@/components/PropertyForm';
 import NotificationCenter from '@/components/NotificationCenter';
 

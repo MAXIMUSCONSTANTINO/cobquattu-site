@@ -3,7 +3,7 @@ import { LogOut, ArrowLeft, User, Lock, Trash2, AlertCircle } from 'lucide-react
 import { Button } from '@/components/ui/button';
 import { useLocation } from 'wouter';
 import { toast } from 'sonner';
-import axios from 'axios';
+import { api } from '@/lib/api';
 
 /**
  * COBQUATTU - Página de Configurações
