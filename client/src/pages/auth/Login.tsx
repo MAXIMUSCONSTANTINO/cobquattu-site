@@ -78,41 +78,66 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl font-bold">COBQUATTU</h1>
-          <p className="text-sm text-accent">Inteligência Territorial</p>
+  <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4">
+    <div className="w-full max-w-md">
+      <div className="text-center mb-12">
+        <h1 className="text-3xl font-bold">COBQUATTU</h1>
+        <p className="text-sm text-accent">Inteligência Territorial</p>
+      </div>
+
+      <form onSubmit={handleLogin} className="space-y-6">
+        <div>
+          <label>Email ou Telefone</label>
+          <Input
+            name="emailOrPhone"
+            value={formData.emailOrPhone}
+            onChange={handleInputChange}
+            placeholder="Digite aqui"
+          />
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div>
-            <label>Email ou Telefone</label>
-            <Input
-              name="emailOrPhone"
-              value={formData.emailOrPhone}
-              onChange={handleInputChange}
-              placeholder="Digite aqui"
-            />
-          </div>
+        <div>
+          <label>Senha</label>
+          <Input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            placeholder="Sua senha"
+          />
+        </div>
 
-          <div>
-            <label>Senha</label>
-            <Input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              placeholder="Sua senha"
-            />
-          </div>
+        <Button type="submit" disabled={isLoading} className="w-full">
+          {isLoading ? "Autenticando..." : "Acessar"}
+          <LogIn className="w-4 h-4 ml-2" />
+        </Button>
+      </form>
 
-          <Button type="submit" disabled={isLoading} className="w-full">
-            {isLoading ? "Autenticando..." : "Acessar"}
-            <LogIn className="w-4 h-4 ml-2" />
-          </Button>
-        </form>
+      {/* 🔥 CADASTROS VOLTARAM AQUI */}
+      <div className="mt-8 space-y-3">
+        <p className="text-center text-muted-foreground">
+          Novo no ecossistema?
+        </p>
+
+        <a href="/auth/register/parceiro" className="block w-full">
+          <button className="w-full border border-accent text-accent py-3 rounded-lg hover:bg-accent hover:text-black transition">
+            Inscrever como Parceiro
+          </button>
+        </a>
+
+        <a href="/auth/register/proprietario" className="block w-full">
+          <button className="w-full border border-accent text-accent py-3 rounded-lg hover:bg-accent hover:text-black transition">
+            Inscrever como Proprietário
+          </button>
+        </a>
+
+        <a href="/auth/register/empresario" className="block w-full">
+          <button className="w-full border border-accent text-accent py-3 rounded-lg hover:bg-accent hover:text-black transition">
+            Inscrever como Empresário
+          </button>
+        </a>
       </div>
     </div>
-  );
+  </div>
+);
 }
