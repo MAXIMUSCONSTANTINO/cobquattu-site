@@ -17,11 +17,12 @@ export async function initializeDatabase() {
     throw new Error("❌ Missing DATABASE_URL");
   }
 
-  const connection = await mysql.createConnection(url);
+const pool = mysql.createPool({
+  uri: url,
+  connectionLimit: 10,
+});
 
-  db = drizzle(connection, { schema, mode: "default" });
-
-  console.log("✅ Database connected successfully");
+db = drizzle(pool, { schema, mode: "default" });
 
   return db;
 }
