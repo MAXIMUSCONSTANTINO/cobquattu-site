@@ -37,11 +37,11 @@ export default function ProjectForm({ onClose, onSuccess, project }: ProjectForm
     try {
       if (project?.id) {
         // Atualizar
-        await axios.put(`/api/projects/${project.id}`, formData);
+        await api.put(`/projects/${project.id}`, formData);
         toast.success('Projeto atualizado com sucesso');
       } else {
         // Criar
-        await axios.post('/api/projects', formData);
+        await api.post('/projects', formData);
         toast.success('Projeto criado com sucesso');
       }
       onSuccess();

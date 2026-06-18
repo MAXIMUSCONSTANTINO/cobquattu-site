@@ -38,11 +38,11 @@ export default function PropertyForm({ onClose, onSuccess, property }: PropertyF
     try {
       if (property?.id) {
         // Atualizar
-        await axios.put(`/api/properties/${property.id}`, formData);
+        await api.put(`/properties/${property.id}`, formData);
         toast.success('Imóvel atualizado com sucesso');
       } else {
         // Criar
-        await axios.post('/api/properties', formData);
+        await api.post('/properties', formData);
         toast.success('Imóvel criado com sucesso');
       }
       onSuccess();

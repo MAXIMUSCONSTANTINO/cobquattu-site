@@ -37,11 +37,11 @@ export default function LeadForm({ onClose, onSuccess, lead }: LeadFormProps) {
     try {
       if (lead?.id) {
         // Atualizar
-        await axios.put(`/api/leads/${lead.id}`, formData);
+        await api.put(`/leads/${lead.id}`, formData);
         toast.success('Lead atualizado com sucesso');
       } else {
         // Criar
-        await axios.post('/api/leads', formData);
+        await api.post('/leads', formData);
         toast.success('Lead criado com sucesso');
       }
       onSuccess();
