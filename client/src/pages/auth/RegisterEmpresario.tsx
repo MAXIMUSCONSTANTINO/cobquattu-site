@@ -55,7 +55,7 @@ export default function RegisterEmpresario() {
     setIsLoading(true);
 
     try {
-      const response = await api.post('/api/auth/register', {
+      const response = await api.post('/auth/register', {
         email: formData.email,
         password: formData.senha,
         firstName: formData.nome,
