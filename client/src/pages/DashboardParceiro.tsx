@@ -43,7 +43,7 @@ export default function DashboardParceiro() {
 
   const loadUserData = async () => {
     try {
-      const response = await axios.get('/api/auth/me');
+      const response = await api.get('/auth/me');
       if (response.data.success) {
         setUser(response.data.user);
         loadLeads();
@@ -64,7 +64,7 @@ export default function DashboardParceiro() {
 
   const loadLeads = async () => {
     try {
-      const response = await axios.get('/api/leads');
+      const response = await api.get('/leads');
       if (response.data.success) {
         setLeads(response.data.leads);
       }
@@ -78,7 +78,7 @@ export default function DashboardParceiro() {
 
   const handleLogout = async () => {
     try {
-      await axios.post('/api/auth/logout');
+      await api.post('/auth/logout');
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
       toast.success('Desconectado com sucesso');
@@ -94,7 +94,7 @@ export default function DashboardParceiro() {
 
     setDeleting(id);
     try {
-      await axios.delete(`/api/leads/${id}`);
+      await api.delete(`/leads/${id}`);
       setLeads(leads.filter(l => l.id !== id));
       toast.success('Cliente deletado com sucesso');
     } catch (error: any) {
